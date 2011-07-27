@@ -1,0 +1,47 @@
+﻿In this document, I would explain the usage as well as underlying Assignment algorithm. 
+
+Usage:
+python milo_challenge.py customersfile.txt productsfile.txt
+Please keep the customersfile.txt and productsfile.txt in the same folder as the code
+
+Assignment Algorithm:
+
+First of all, I create a matrix of dimension number of customers times number of products. Each cell in the matrix represents the suitability score calculated by the procedure described in the Challenge statement. Note that, it is possible that number of customers are more than number of products and vice versa. I deal with the situations by padding zeros as necessary to make a square matrix.
+
+The “customer to product” assignment problem is an example of the classic assignment problem in Linear Programming. There are various ways to solve the linear optimization problem like simplex method, Hungarian (Munkres) algorithm. I opted Hungarian Algorithm because of its cleaner flow and easy to understand steps. 
+  
+The Hungarian Algorithm I implemented consists of the following 6 steps:
+  
+Step-1
+For each row of the matrix, find the smallest element and subtract it from every element in its row. 
+Go to Step 2.
+
+Step-2
+From the matrix resulting from Step-1, find a zero. 
+If there is no zero marked as 'starred' in the same row or column, mark that zero as 'starred'. 
+Repeat for each element in the matrix. 
+Go to Step-3.
+
+Step-3:
+Cover each column containing a 'starred' zero. 
+If number of columns equal to number of columns in the matrix (assuming squared matrix) are covered, then the 'starred' zeros describe a complete set of unique assignments. In this case, algorithm has finished, hence Done.
+Otherwise, Go to Step 4.
+
+Step-4:
+Find a non-covered zero and mark it as 'primed'. 
+If there is no 'starred' zero in the row containing this 'primed zero', Go to Step 5. 
+Otherwise, cover this row and uncover the column containing the 'starred' zero. 
+Continue in this manner until there are no uncovered zeros left. 
+Save the smallest uncovered value and Go to Step 6.
+
+Step-5:
+ Construct a series of alternating 'primed' and 'starred' zeros as follows:
+Let series[i][j] represent the location of uncovered 'primed' zero found in Step 4.
+Let series[k][j] denote the 'starred' zero in the column j(i-e in the same column as the last 'starred' zero), if there is any .
+Let series[k][l] denote the 'primed' zero in the row k (i-e in the row of last 'starred' zero). 
+Continue until the you find a 'primed' zero that has no 'starred' zero in its column. 
+Mark each 'starred' zero in the series as 'un-starred', 'star' each 'primed' zero of the series, erase all 'primed' and uncover every line in the matrix. 
+Return to Step 3
+
+Step-6:
+Add the value found in Step 4 to every element of each covered row, and subtract it from every element of each uncovered column. Return to Step 4 without altering any stars, primes, or covered lines.
